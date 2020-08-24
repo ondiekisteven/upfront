@@ -16,7 +16,7 @@ def chat_api():
             print(f'Message from {request.json["messages"][0]["chatName"]}: {request.json["messages"][0]["body"]}')
             return bot.processing()
         else:
-            return '----'
+            return ' '
 
 
 if __name__ == '__main__':

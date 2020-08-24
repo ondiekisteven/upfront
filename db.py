@@ -3,7 +3,7 @@ from loadConf import *
 
 
 def getDb():
-    return pymysql.connect('localhost', 'root', '', 'upfront')
+    return pymysql.connect(maindb_host(), maindb_user(), maindb_pass(), maindb_db())
 
 
 def get_categories():
@@ -117,3 +117,5 @@ def check_payment():
     cursor = db.cursor()
     cursor.execute(f"SELECT * FROM transactions t join transactions_queue tq on tq.transaction_id = t.id")
     return cursor.fetchone()
+
+

@@ -19,3 +19,19 @@ def stkdb_pass():
 
 def stkdb_db():
     return parser.get('stk_db', 'db')
+
+
+def maindb_host():
+    return parser.get('stk_db', 'host')
+
+
+def maindb_user():
+    return parser.get('stk_db', 'user')
+
+
+def maindb_pass():
+    return parser.get('stk_db', 'pass')
+
+
+def maindb_db():
+    return parser.get('stk_db', 'db')
