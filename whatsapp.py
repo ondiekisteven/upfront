@@ -17,8 +17,8 @@ class ChatApi:
     def __init__(self, json):
         self.json = json
         self.dict_message = json['messages']
-        self.APIUrl = 'https://eu148.chat-api.com/instance163556/'
-        self.token = 'bzu6nqwgqrz35emp'
+        self.APIUrl = 'https://eu127.chat-api.com/instance164543/'
+        self.token = 'ke8bk8mmzseokxwi'
 
     def send_requests(self, method, data):
         url = f'{self.APIUrl}{method}?token={self.token}'

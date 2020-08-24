@@ -22,16 +22,16 @@ def stkdb_db():
 
 
 def maindb_host():
-    return parser.get('stk_db', 'host')
+    return parser.get('main_db', 'host')
 
 
 def maindb_user():
-    return parser.get('stk_db', 'user')
+    return parser.get('main_db', 'user')
 
 
 def maindb_pass():
-    return parser.get('stk_db', 'pass')
+    return parser.get('main_db', 'pass')
 
 
 def maindb_db():
-    return parser.get('stk_db', 'db')
+    return parser.get('main_db', 'name')

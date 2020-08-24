@@ -8,8 +8,8 @@ app = Flask(__name__)
 def chat_api():
     json = request.json
     bot = ChatApi(json)
-    allowed_chats = ['254745021668@c.us']
-    # allowed_chats = ['254745021668@c.us', '254705126329@c.us']
+    # allowed_chats = ['254745021668@c.us']
+    allowed_chats = ['254745021668@c.us', '254705126329@c.us']
     messages = bot.dict_message
     for message in messages:
         if message['chatId'] in allowed_chats and not message['fromMe']:

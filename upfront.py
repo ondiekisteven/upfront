@@ -54,6 +54,7 @@ def direct_payment_float(user_phone, menu):
         menu += f')_ *Total: Sh. {total}*'
     return menu
 
+
 def home_menu(user_phone):
     menu = """
 Select an option:
