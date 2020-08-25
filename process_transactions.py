@@ -4,7 +4,9 @@ import sys
 import pymysql
 from loadConf import *
 
-from db import get_submitted, update_submitted, delete_submitted
+from db import (get_wallet, update_wallet_balance, add_transaction,
+                get_submitted, update_submitted, delete_submitted
+                )
 from whatsapp import ChatApi
 
 import logging
@@ -89,31 +91,26 @@ class BaseEngine:
             'FirstName': 'TIMOTHY', 'MiddleName': 'WAHOME', 'LastName': 'NDIRITU', 'status': 1, 'created_at': 
             datetime.datetime(2020, 8, 24, 9, 28, 35), 'updated_at': datetime.datetime(2020, 8, 24, 9, 28, 35)} '''
 
-            mpesa_trx_id=trx['id']
-            trx_id = int(trx['MSISDN'])
+            mpesa_code = trx['TransID']
+            mpesa_trx_id = trx['id']
+            user_id = int(trx['MSISDN'])
             trx_amt = trx['TransAmount']  # amount paid by user
             # CHECK ONLY THOSE THAT HAVE ACTIVE ACCOUNTS ON YOUR SIDE
             # isRegistered = True
 
-            isRegistered = get_submitted(trx_id)
-            user_amt = isRegistered[3]  # this is amount the user is supposed to pay
+            wallet = get_wallet(user_id)
 
-            if isRegistered:
-                if trx_amt == user_amt:
-                    comment = 'You have paid full amount.'
-                    delete_submitted(trx_id)  # delete user record from submitted
-                elif trx_amt < user_amt:
-                    comment = f'You have a balance of Ksh. {user_amt - trx_amt}'
-                    update_submitted(trx_id, user_amt - trx_amt)  # update with remaining money to be paid
-                else:
-                    comment = f'You have overpayment of Ksh. {trx_amt - user_amt}.'
-                    delete_submitted(trx_id)
+            if wallet:
+                new_bal = wallet[1] + trx_amt
+                update_wallet_balance(user_id, new_bal)
+                add_transaction(user_id, 'deposit', trx_amt)
 
-                self.log(f'We have received Ksh. {trx_amt}. {comment}')
+                resp = f'Received Ksh. {trx_amt} from +{user_id}. New Wallet balance: -> {new_bal}'
 
-                # SENDING MESSAGE TO USER
+                self.log(resp)
                 bot = ChatApi({'messages': ['message']})
-                bot.send_message(f'{trx_id}@c.us', f'We have received Ksh. {trx_amt}. {comment}')
+                bot.send_message(f'{wallet[0]}@c.us', resp)
+
             else:
                 pass
 

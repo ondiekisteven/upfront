@@ -89,6 +89,13 @@ def remove_user_item(user_phone, item_name):
     db.commit()
 
 
+def remove_all_user_items(user_phone):
+    db = getDb()
+    cursor = db.cursor()
+    cursor.execute(f'DELETE FROM user_items WHERE user_phone = {user_phone}')
+    db.commit()
+
+
 def add_submitted(phone, amount):
     db = getDb()
     cursor = db.cursor()
@@ -150,9 +157,47 @@ def check_payment():
     cursor.execute(f"SELECT * FROM transactions t join transactions_queue tq on tq.transaction_id = t.id")
     return cursor.fetchone()
 
-#
-# from time import time
-# uniq = time()
-# request_id = initiateStkPush(str('254745021668'), uniq, '5', 'Test', '0')
-# print(f"request_id -> {request_id}")
-# insert_request_queue(request_id, '0')
+
+# -------------------------------- WALLET AND TRANSACTIONS ---------------------------------------------------
+
+
+def create_wallet(phone):
+    db = getDb()
+    cursor = db.cursor()
+    cursor.execute(f'INSERT INTO wallet(user_id, payment_number) VALUES ({phone}, {phone})')
+    db.commit()
+
+
+def update_wallet_balance(phone, new_balance):
+    db = getDb()
+    cursor = db.cursor()
+    cursor.execute(f'UPDATE wallet SET balance = {new_balance} WHERE user_id = {phone}')
+    db.commit()
+
+
+def update_wallet_payPhone(phone, new_pay_phone):
+    db = getDb()
+    cursor = db.cursor()
+    cursor.execute(f'UPDATE wallet SET payment_number = {new_pay_phone} WHERE user_id = {phone}')
+    db.commit()
+
+
+def get_wallet(phone):
+    db = getDb()
+    cursor = db.cursor()
+    cursor.execute(f'SELECT * FROM wallet WHERE user_id = {phone}')
+    return cursor.fetchone()
+
+
+def add_transaction(user_id, trans_type, amount):
+    db = getDb()
+    cursor = db.cursor()
+    cursor.execute(f'INSERT INTO transactions(user_id, transType, amount) VALUES ({user_id}, "{trans_type}", {amount})')
+    db.commit()
+
+
+def get_transactions(phone):
+    db = getDb()
+    cursor = db.cursor()
+    cursor.execute(f'SELECT * FROM transactions WHERE user_id = {phone} ORDER BY id desc')
+    return cursor.fetchall()

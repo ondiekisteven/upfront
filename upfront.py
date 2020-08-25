@@ -12,8 +12,9 @@ class UpfrontUser:
             self._last_command = user[1]
             self._last_reply = user[2]
         else:
-            print(f"{self.phone} -> {self.message}")
+            print(f"New user: {self.phone} -> {self.message}")
             db.add_instance(self.phone, "join", -1)
+            db.create_wallet(self.phone)
 
             user = db.get_instance(self.phone)
             self._last_reply = user[2]
@@ -33,13 +34,14 @@ class UpfrontUser:
 
 def float_items(user_phone, menu):
     sItems = db.get_user_items(user_phone)
+    wallet = db.get_wallet(user_phone)[1]
     if sItems:
         menu += f'\n\n_Selected items: ('
         total = 0
         for item in sItems:
             menu += f'{item[1][:12]}, '
             total += item[2]
-        menu += f')_ *Total: Sh. {total}*\n_Reply with \U0001F911 to submit them_\n'
+        menu += f')_ *Total: Sh. {total}*\n_Reply with \U0001f91d to submit them_\n*Your wallet bal: {wallet}*'
     return menu
 
 
@@ -59,9 +61,8 @@ def home_menu(user_phone):
     menu = """
 Select an option:
 1. Services
-2. Get quotation
-3. Ask for delivery
-4. Ask for office/company clean up
+2. Checkout
+3. My Account
     """
 
     return float_items(user_phone, menu)
@@ -107,7 +108,7 @@ def payment_menu(user_phone, amount):
     menu += f"Phone number: {user_phone}\n"
     menu += f"Amount: {amount}"
 
-    return menu + "\n\n 1- confirm\n0 - Exit"
+    return menu + "\n\n 1- Yes, let me pay with mpesa\n2 - Yes, but use my wallet to pay\n0 - Exit"
 
 
 def services_menu():
@@ -116,6 +117,10 @@ def services_menu():
 
 def delivery_menu():
     return "This is the delivery menu"
+
+
+def my_account_menu():
+    return "1 - Check view wallet balance\n2 - View payment history"
 
 
 def categories_menu(user_phone):

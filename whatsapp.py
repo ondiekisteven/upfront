@@ -42,8 +42,9 @@ class ChatApi:
                 phone = get_phone(message)
                 # name = message['author']
 
-                if not get_instance(phone):
+                if not get_instance(phone):  # if user is using for first time, start with this message
                     self.send_message(message['chatId'], 'Hello, I am your online assistant. \nWhat can i do for you..')
                 reply = main(phone, text)
-                self.send_message(message['chatId'], reply)
+                for txt in reply['body']:
+                    self.send_message(message['chatId'], txt)
                 return reply
