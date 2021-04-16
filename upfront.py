@@ -88,7 +88,7 @@ def incorrect_items_menu(phone):
     items = db.get_user_items(user_phone=phone)
     i = 1
     for item in items:
-        message += f'{i}. {item[1]} -> Sh. {item[2]}'
+        message += f'{i}. {item[1]} -> Sh. {item[2]}\n'
         i += 1
 
     message += '\n\n0 - Take me to main menu'

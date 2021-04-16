@@ -1,5 +1,8 @@
 from flask import Flask, request
+from json import dumps
 from whatsapp import ChatApi, get_phone
+from send_to_queue import to_queue
+
 
 app = Flask(__name__)
 
@@ -15,7 +18,10 @@ def chat_api():
         # if not message['fromMe']:
         if message['chatId'] in allowed_chats and not message['fromMe']:
             print(f'Message from {request.json["messages"][0]["chatName"]}: {request.json["messages"][0]["body"]}')
-            return bot.processing()
+            # return bot.processing()
+            ##################################################
+            return to_queue(dumps(message))
+            ##################################################
         else:
             return ' '
 

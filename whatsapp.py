@@ -1,3 +1,5 @@
+import os
+
 import requests
 from json import dumps
 from main import main
@@ -17,8 +19,8 @@ class ChatApi:
     def __init__(self, json):
         self.json = json
         self.dict_message = json['messages']
-        self.APIUrl = 'https://eu127.chat-api.com/instance164543/'
-        self.token = 'ke8bk8mmzseokxwi'
+        self.APIUrl = os.environ.get('API_URL')
+        self.token = os.environ.get('API_TOKEN')
 
     def send_requests(self, method, data):
         url = f'{self.APIUrl}{method}?token={self.token}'
